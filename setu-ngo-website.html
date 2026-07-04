@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setu — Digital Literacy Foundation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --indigo:#2C4A6E;
+    --indigo-deep:#203955;
+    --turmeric:#E3A83E;
+    --paper:#F6F1E7;
+    --paper-warm:#EFE6D3;
+    --clay:#B4552F;
+    --sage:#6E8B5E;
+    --line: rgba(27,36,48,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit;text-decoration:none;}
+  img,svg{display:block;max-width:100%;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  @media(max-width:640px){.wrap{padding:0 20px;}}
+
+  /* motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(246,241,231,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700; font-size:1.35rem; color:var(--indigo-deep);}
+  .brand .mark{width:30px;height:30px;}
+  .navlinks{display:flex; gap:34px; font-size:0.95rem; color:var(--ink);}
+  .navlinks a{position:relative; padding:4px 0;}
+  .navlinks a::after{content:"";position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--clay);transition:width .25s ease;}
+  .navlinks a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--indigo-deep); color:var(--paper); padding:10px 20px; border-radius:2px;
+    font-size:0.9rem; letter-spacing:.02em; transition:background .2s ease;
+  }
+  .nav-cta:hover{background:var(--clay);}
+  .navlinks, .nav-cta{white-space:nowrap;}
+  @media(max-width:860px){ .navlinks{display:none;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 80px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:56px; align-items:center;
+  }
+  @media(max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:48px;} }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:0.78rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--clay); margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--clay);}
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 3.7rem);
+    line-height:1.08;
+    color:var(--indigo-deep);
+    max-width:640px;
+  }
+  .hero h1 em{font-style:italic; color:var(--clay);}
+  .hero p.lede{
+    margin-top:24px; font-size:1.12rem; color:#3c4756; max-width:520px; font-weight:300;
+  }
+  .hindi{font-size:0.95rem; color:var(--sage); margin-top:10px; font-style:italic;}
+  .cta-row{display:flex; gap:16px; margin-top:36px; flex-wrap:wrap;}
+  .btn{
+    padding:14px 26px; font-size:0.95rem; border-radius:2px; display:inline-block;
+    transition:transform .2s ease, background .2s ease, color .2s ease;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--clay); color:var(--paper);}
+  .btn-primary:hover{background:var(--indigo-deep); transform:translateY(-2px);}
+  .btn-ghost{border-color:var(--ink); color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink); color:var(--paper); transform:translateY(-2px);}
+
+  /* Dial signature element */
+  .dial-wrap{display:flex; flex-direction:column; align-items:center; gap:18px;}
+  .dial-caption{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:.05em; color:#5b6674; text-align:center;}
+  .dial-caption b{color:var(--indigo-deep);}
+  #needle{transform-origin:150px 150px; transition:transform 1.8s cubic-bezier(.22,1,.36,1);}
+
+  /* ---------- SECTION GENERAL ---------- */
+  section{padding:96px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{font-size:clamp(1.9rem,3.4vw,2.6rem); color:var(--indigo-deep);}
+  .section-head p{margin-top:16px; color:#3c4756; font-size:1.05rem; font-weight:300;}
+
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--paper-warm); border-bottom:1px solid var(--line);}
+  .about-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:start;}
+  @media(max-width:900px){.about-grid{grid-template-columns:1fr;}}
+  .about-figure{border-left:3px solid var(--turmeric); padding-left:28px;}
+  .about-figure .stat{font-family:'Fraunces',serif; font-size:3rem; color:var(--indigo-deep); line-height:1;}
+  .about-figure .stat-label{font-family:'IBM Plex Mono',monospace; font-size:0.8rem; color:#5b6674; margin-top:8px; letter-spacing:.03em;}
+  .about-body p{margin-bottom:18px; color:#2c3644; font-size:1.02rem;}
+  .about-body p:first-child{font-size:1.15rem; font-weight:500; color:var(--ink);}
+
+  /* ---------- PROGRAMS ---------- */
+  .programs-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--line); border:1px solid var(--line);}
+  @media(max-width:760px){.programs-grid{grid-template-columns:1fr;}}
+  .program{
+    background:var(--paper); padding:40px 38px; position:relative;
+    transition:background .25s ease;
+  }
+  .program:hover{background:var(--paper-warm);}
+  .program .num{font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--clay); letter-spacing:.05em;}
+  .program h3{font-size:1.35rem; margin-top:14px; color:var(--indigo-deep);}
+  .program p{margin-top:12px; color:#3c4756; font-size:0.98rem;}
+  .program .tag{
+    display:inline-block; margin-top:18px; font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem; color:var(--sage); border:1px solid var(--sage); border-radius:20px; padding:4px 12px;
+  }
+
+  /* ---------- IMPACT ---------- */
+  .impact{background:var(--indigo-deep); color:var(--paper);}
+  .impact .section-head h2{color:var(--paper);}
+  .impact .section-head p{color:#cbd6e2;}
+  .impact .eyebrow{color:var(--turmeric);}
+  .impact .eyebrow::before{background:var(--turmeric);}
+  .impact-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.14);}
+  @media(max-width:760px){.impact-grid{grid-template-columns:repeat(2,1fr);}}
+  .impact-cell{background:var(--indigo-deep); padding:36px 26px;}
+  .impact-cell .num{font-family:'Fraunces',serif; font-size:2.6rem; color:var(--turmeric);}
+  .impact-cell .lbl{font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:#b9c6d4; margin-top:10px;}
+
+  /* ---------- GET INVOLVED ---------- */
+  .involve-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  @media(max-width:900px){.involve-grid{grid-template-columns:1fr;}}
+  .involve-card{
+    border:1px solid var(--line); padding:34px 30px; background:var(--paper);
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .involve-card:hover{transform:translateY(-4px); border-color:var(--clay);}
+  .involve-card .icon{width:34px; height:34px; margin-bottom:20px;}
+  .involve-card h3{font-size:1.2rem; color:var(--indigo-deep);}
+  .involve-card p{margin-top:10px; font-size:0.95rem; color:#3c4756;}
+  .involve-card a.link{
+    display:inline-block; margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:0.82rem;
+    color:var(--clay); border-bottom:1px solid var(--clay); padding-bottom:2px;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact{background:var(--paper-warm); border-top:1px solid var(--line);}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  @media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+  .field{margin-bottom:20px;}
+  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:.04em; color:#5b6674; margin-bottom:8px;}
+  .field input, .field textarea{
+    width:100%; border:none; border-bottom:1px solid var(--ink); background:transparent;
+    padding:10px 2px; font-family:'Work Sans',sans-serif; font-size:1rem; color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus{outline:none; border-bottom-color:var(--clay);}
+  .field textarea{resize:vertical; min-height:80px;}
+  .contact-info h3{color:var(--indigo-deep); font-size:1.3rem; margin-bottom:18px;}
+  .contact-info p{color:#3c4756; margin-bottom:8px; font-size:0.98rem;}
+  .contact-info .addr{margin-top:26px; padding-top:26px; border-top:1px solid var(--line);}
+
+  footer{background:var(--ink); color:#aab4bf; padding:44px 0;}
+  .foot-grid{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .foot-grid .brand{color:var(--paper);}
+  footer .fine{font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:#7c8794;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--clay); outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 40" fill="none">
+        <path d="M4 28C10 12 30 12 36 28" stroke="#2C4A6E" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="4" cy="28" r="3.4" fill="#E3A83E"/>
+        <circle cx="36" cy="28" r="3.4" fill="#B4552F"/>
+      </svg>
+      Setu
+    </div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#programs">Programs</a>
+      <a href="#impact">Impact</a>
+      <a href="#involve">Get Involved</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#involve" class="nav-cta">Donate</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Setu Digital Literacy Foundation</div>
+      <h1>Every screen is a door.<br>We teach people <em>how to open it</em>.</h1>
+      <p class="lede">Setu runs neighbourhood digital-literacy camps across small towns in North India — turning smartphones from a source of confusion into a tool people actually control.</p>
+      <div class="hindi">सेतु — जोड़ने का एक पुल, ऑफ़लाइन से ऑनलाइन तक</div>
+      <div class="cta-row">
+        <a href="#involve" class="btn btn-primary">Support a learner</a>
+        <a href="#programs" class="btn btn-ghost">See our programs</a>
+      </div>
+    </div>
+    <div class="dial-wrap">
+      <svg width="300" height="180" viewBox="0 0 300 180">
+        <path d="M20 150 A130 130 0 0 1 280 150" fill="none" stroke="#1B2430" stroke-width="1" opacity="0.15"/>
+        <path d="M20 150 A130 130 0 0 1 150 20" fill="none" stroke="#B4552F" stroke-width="6" stroke-linecap="round"/>
+        <path d="M150 20 A130 130 0 0 1 280 150" fill="none" stroke="#6E8B5E" stroke-width="6" stroke-linecap="round"/>
+        <g id="needle">
+          <line x1="150" y1="150" x2="150" y2="45" stroke="#1B2430" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="150" cy="150" r="6" fill="#1B2430"/>
+        </g>
+        <text x="20" y="170" font-family="IBM Plex Mono" font-size="11" fill="#5b6674">अनजान</text>
+        <text x="242" y="170" font-family="IBM Plex Mono" font-size="11" fill="#5b6674">जुड़ा हुआ</text>
+      </svg>
+      <div class="dial-caption">Average learner confidence, week 1 → week 6:<br><b>"I'm scared of this phone"</b> → <b>"I paid my bill myself"</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-figure reveal">
+      <div class="stat">2019</div>
+      <div class="stat-label">FOUNDED IN A SINGLE MOHALLA CLASSROOM, GHAZIABAD</div>
+    </div>
+    <div class="about-body reveal">
+      <p>Setu started with six plastic chairs, one borrowed Android phone, and a question a shopkeeper asked us: "Beta, yeh UPI cheez kya hai?" ("What even is this UPI thing?")</p>
+      <p>We realised the digital divide in small-town India isn't about access anymore — most households already own a smartphone. It's about confidence. People can own a device for years and still be afraid to send a text without help, terrified of scams, locked out of government portals meant to serve them.</p>
+      <p>So we built Setu around one idea: sit next to someone, on their terms, in their language, until the fear turns into fluency. No jargon. No English-only manuals. Just patient, repeatable teaching — run by local youth we train and pay as facilitators.</p>
+      <p>Today we work across 14 neighbourhoods in Ghaziabad, Meerut, and East Delhi, in partnership with local schools, ration shops, and resident welfare associations who lend us a room for two hours a week.</p>
+    </div>
+  </div>
+</section>
+
+<section id="programs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What we run</div>
+      <h2>Four programs, one bridge</h2>
+      <p>Each program targets a different point where people get stuck between the offline world they know and the online world they're pushed into.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="programs-grid reveal">
+      <div class="program">
+        <div class="num">01 / Elders</div>
+        <h3>Smartphone Sahayata</h3>
+        <p>Weekly sit-down sessions for people 55+, covering calls, video chat with family abroad, and spotting scam messages before they cost anything.</p>
+        <span class="tag">Ongoing · weekly</span>
+      </div>
+      <div class="program">
+        <div class="num">02 / Small business</div>
+        <h3>Kirana Connect</h3>
+        <p>We help local shopkeepers set up UPI, list on delivery apps, and keep digital stock ledgers — without needing to trust a third-party "agent" who charges hidden fees.</p>
+        <span class="tag">6-week cohort</span>
+      </div>
+      <div class="program">
+        <div class="num">03 / Youth</div>
+        <h3>Yuva Digital Skills</h3>
+        <p>Job-readiness for 18–24 year olds: filling government forms, writing a professional email, using spreadsheets, and spotting fake job postings.</p>
+        <span class="tag">8-week cohort</span>
+      </div>
+      <div class="program">
+        <div class="num">04 / Community</div>
+        <h3>Mohalla Digital Camps</h3>
+        <p>One-day pop-up camps in a park or community hall — walk-in help for anything from Aadhaar updates to setting up a first email address.</p>
+        <span class="tag">Monthly · drop-in</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="impact" id="impact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The ledger</div>
+      <h2>What six years of Tuesday evenings adds up to</h2>
+      <p>We keep these numbers the way our facilitators keep attendance — by hand, updated every quarter, not projected.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="impact-grid reveal">
+      <div class="impact-cell">
+        <div class="num">3,140</div>
+        <div class="lbl">LEARNERS TAUGHT SINCE 2019</div>
+      </div>
+      <div class="impact-cell">
+        <div class="num">14</div>
+        <div class="lbl">NEIGHBOURHOODS ACTIVE IN</div>
+      </div>
+      <div class="impact-cell">
+        <div class="num">96</div>
+        <div class="lbl">TRAINED YOUTH FACILITATORS</div>
+      </div>
+      <div class="impact-cell">
+        <div class="num">₹0</div>
+        <div class="lbl">CHARGED TO ANY LEARNER, EVER</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="involve">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Join the bridge</div>
+      <h2>Three ways to help</h2>
+      <p>Setu runs on volunteer facilitators, small recurring donations, and rooms lent by neighbours. Pick whichever fits.</p>
+    </div>
+    <div class="involve-grid reveal">
+      <div class="involve-card">
+        <svg class="icon" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="11" r="6" stroke="#2C4A6E" stroke-width="2"/><path d="M4 30c1.5-8 8-11 13-11s11.5 3 13 11" stroke="#2C4A6E" stroke-width="2" stroke-linecap="round"/></svg>
+        <h3>Volunteer as a facilitator</h3>
+        <p>Two hours a week teaching a small group. We train you first — no teaching background needed, just patience and basic smartphone comfort.</p>
+        <a href="#contact" class="link">Apply to volunteer →</a>
+      </div>
+      <div class="involve-card">
+        <svg class="icon" viewBox="0 0 34 34" fill="none"><path d="M17 30S3 21.5 3 12.5C3 7 7 4 11 4c3 0 5 1.5 6 4 1-2.5 3-4 6-4 4 0 8 3 8 8.5C31 21.5 17 30 17 30Z" stroke="#B4552F" stroke-width="2"/></svg>
+        <h3>Fund a learner's seat</h3>
+        <p>₹600 covers one person's full 6-week cohort — printed materials, facilitator stipend, and a phone data pack for practice.</p>
+        <a href="#contact" class="link">Donate a seat →</a>
+      </div>
+      <div class="involve-card">
+        <svg class="icon" viewBox="0 0 34 34" fill="none"><rect x="4" y="8" width="26" height="18" rx="2" stroke="#6E8B5E" stroke-width="2"/><path d="M4 12l13 8 13-8" stroke="#6E8B5E" stroke-width="2"/></svg>
+        <h3>Lend us a room or a network</h3>
+        <p>Shopkeepers' association halls, school classrooms after hours, RWA community rooms — if you can offer space or an introduction, we can bring a camp there.</p>
+        <a href="#contact" class="link">Partner with us →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <form class="reveal" onsubmit="event.preventDefault(); this.querySelector('.sent').style.display='block';">
+      <div class="field">
+        <label for="name">NAME</label>
+        <input id="name" type="text" required placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="email">EMAIL</label>
+        <input id="email" type="email" required placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="reason">HOW YOU'D LIKE TO HELP</label>
+        <textarea id="reason" placeholder="Volunteer, donate, partner, or something else..."></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit" style="border:none; cursor:pointer;">Send message</button>
+      <p class="sent mono" style="display:none; margin-top:14px; color:#6E8B5E; font-size:0.85rem;">Thank you — someone from Setu will reply within a few days.</p>
+    </form>
+    <div class="contact-info reveal">
+      <h3>Visit or write to us</h3>
+      <p>We reply fastest on WhatsApp, since that's what most of our facilitators actually use.</p>
+      <p class="mono" style="margin-top:16px;">hello@setufoundation.org</p>
+      <p class="mono">+91 98XXX XXXXX (WhatsApp)</p>
+      <div class="addr">
+        <p><b>Community Office</b></p>
+        <p>Shop No. 4, Nehar Road Market,<br>Ghaziabad, Uttar Pradesh 201001</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div class="brand" style="font-size:1.1rem;">Setu Digital Literacy Foundation</div>
+    <div class="fine">Registered nonprofit society · Est. 2019 · Ghaziabad, India</div>
+  </div>
+</footer>
+
+<script>
+  // needle animation on load
+  window.addEventListener('load', () => {
+    const needle = document.getElementById('needle');
+    setTimeout(() => { needle.style.transform = 'rotate(130deg)'; }, 400);
+  });
+
+  // scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
